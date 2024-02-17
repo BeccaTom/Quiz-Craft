@@ -1,12 +1,12 @@
 .box {
-    /* display: flex; */
+
 
 }
 
 .center {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
+
 }
 
 .r {
@@ -47,9 +47,8 @@
 }
 
 .chartBox {
-    /* border: 1px solid red; */
     display: flex;
-    
+
 }
 .chartLeft{
     width: 50%;
@@ -90,4 +89,3 @@
     height: 255px;
     padding-top: 30px;
 }
-
