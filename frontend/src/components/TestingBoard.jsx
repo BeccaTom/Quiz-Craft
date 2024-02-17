@@ -230,8 +230,8 @@ export default function TestingBoard() {
         details: answerRecords,
       });
       initPie([
-        { value: rightNum, name: 'Correct Number' },
-        { value: wrongNum, name: 'Wrong Number' },
+        { value: rightNum, name: 'Correct' },
+        { value: wrongNum, name: 'Incorrect' },
       ]);
       fetchData({
         url: '/record',
