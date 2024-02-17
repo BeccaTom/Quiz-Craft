@@ -45,7 +45,7 @@ export default function Wrap() {
               }}
               className={sty.logo}
             />
-            <div className={sty.navTit}>Teknojelly</div>
+            <div className={sty.navTit}>QuizCraft</div>
             {navList.map((item, index) => {
               return <div key={index} onClick={() => {
                 navigate(item.path);
