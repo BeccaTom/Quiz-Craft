@@ -54,6 +54,7 @@ export default function Home() {
           }}
           autoComplete="off"
         >
+          {/* Test Mode Form Input */}
           <Form.Item initialValue="test" label="Mode" name="mode">
             <Radio.Group>
               <Radio value="test">Test Mode</Radio>
@@ -90,6 +91,7 @@ export default function Home() {
               ]}
             />
           </Form.Item>
+          {/* Difficulty Level Form Input */}
           <Form.Item
             label="Difficulty"
             name="difficulty"
@@ -120,7 +122,7 @@ export default function Home() {
               ]}
             />
           </Form.Item>
-
+          {/* Subject Matter Form Input */}
           <Form.Item
             label="Subject"
             name="subject"
