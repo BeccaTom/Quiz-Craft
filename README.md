@@ -15,7 +15,6 @@ Create personalized quizzes to test yourself and self-empower your learning with
 
 ## Setup On Your Local Machine
 
-Download the repository.
 
 To start the frontend application, follow these steps:
 
