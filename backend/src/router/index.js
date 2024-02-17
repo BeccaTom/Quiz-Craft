@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
@@ -13,6 +14,6 @@ fs.readdir(__dirname, (err, files) => {
             router.use(`/${fileName}`, require(`./${file}`));
         }
     });
-  
+
 });
 module.exports = router;
