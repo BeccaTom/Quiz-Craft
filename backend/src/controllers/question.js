@@ -2,38 +2,38 @@ const sequelize = require("../models");
 const Sequelize = require("sequelize");
 
 function getRandomQuestions(arr, numElements) {
-    // 如果要取的元素数量超过数组长度，返回整个数组
+
     if (numElements >= arr.length) {
         return shuffleArray(arr);
     }
-    // 复制原数组，避免修改原数组
+
     let copyArr = arr.slice();
     let randomElements = [];
 
     for (let i = 0; i < numElements; i++) {
-        // 生成一个随机索引
+
         const randomIndex = Math.floor(Math.random() * copyArr.length);
-        // 从原数组中取出该索引对应的元素，并将其放入结果数组
+
         randomElements.push(copyArr[randomIndex]);
-        // 从原数组中移除已选取的元素，避免重复选取
+
         copyArr.splice(randomIndex, 1);
     }
 
     return randomElements;
 }
 
-// 洗牌算法函数
+
 function shuffleArray(array) {
     let currentIndex = array.length;
     let randomIndex;
 
-    // 使用洗牌算法，从后往前遍历数组
+
     while (currentIndex !== 0) {
-        // 随机选择一个元素
+
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        // 交换当前元素和随机选择的元素
+
         [array[currentIndex], array[randomIndex]] = [
             array[randomIndex],
             array[currentIndex],

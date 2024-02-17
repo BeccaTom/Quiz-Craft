@@ -14,7 +14,7 @@ function randomNum(minNum, maxNum) {
             break;
     }
 }
-// login
+
 exports.login = async (req, res, next) => {
     let user = await sequelize.models.user.findOne({
         where: req.body
@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
         data: user
     });
 };
-// register
+
 exports.register = async (req, res, next) => {
     const {
         email
@@ -61,7 +61,7 @@ exports.register = async (req, res, next) => {
         data
     });
 };
-// Update PassWord
+
 exports.updatePwd = async (req, res, next) => {
     const {
         id,
@@ -90,7 +90,7 @@ exports.updatePwd = async (req, res, next) => {
         data
     });
 };
-// renew
+
 exports.update = async (req, res, next) => {
     const {
         email
@@ -124,7 +124,7 @@ exports.update = async (req, res, next) => {
         data
     });
 };
-// delete
+
 exports.destroy = async (req, res, next) => {
     await sequelize.models.user.destroy({
         where: {
@@ -136,7 +136,7 @@ exports.destroy = async (req, res, next) => {
         msg: "User account has been successfully deleted.",
     });
 };
-// newly added
+
 exports.create = async (req, res, next) => {
     const data = await sequelize.models.user.create(req.body);
     res.json({

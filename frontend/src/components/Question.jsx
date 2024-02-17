@@ -252,7 +252,6 @@ export default function Question() {
             wrapperCol={{ span: 18 }}
             autoComplete="off"
             onFinish={(v) => {
-              // console.log("v = ", v)
               let { title, difficulty, type, subject, desc } = v;
               let optionsStr;
               let answerArr = [];
@@ -284,8 +283,7 @@ export default function Question() {
                 })
                 .join("~");
               let answerStr = answerArr.join("~");
-              // console.log("optionsStr = ", optionsStr)
-              // console.log("answerStr = ", answerStr)
+
               let bodyData = {
                 title,
                 difficulty,
@@ -310,7 +308,7 @@ export default function Question() {
                   }
                 });
               } else {
-                // 编辑
+
                 request({
                   url: `/question/${currentItem.id}`,
                   method: "put",
@@ -405,7 +403,6 @@ export default function Question() {
             <Form.Item label="Question Options">
               <Button
                 onClick={() => {
-                  //   console.log("type = ", modelForm.getFieldValue("type"));
                   if (modelForm.getFieldValue("type") == "True/False") {
                     message.error("True/False questions can only have 2 options!");
                     return;

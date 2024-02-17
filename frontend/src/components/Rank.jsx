@@ -93,31 +93,7 @@ const columns = [
 ];
 export default function Rank() {
   const [tableData, setTableData] = useState([
-    // {
-    //   avatar: "",
-    //   name: "pw1",
-    //   number: 50,
-    // },
-    // {
-    //   avatar: "",
-    //   name: "pw2",
-    //   number: 30,
-    // },
-    // {
-    //   avatar: "",
-    //   name: "pw3",
-    //   number: 30,
-    // },
-    // {
-    //   avatar: "",
-    //   name: "pw4",
-    //   number: 50,
-    // },
-    // {
-    //   avatar: "",
-    //   name: "pw5",
-    //   number: 30,
-    // },
+
   ]);
 
   const getData = async () => {

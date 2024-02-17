@@ -3,13 +3,13 @@ const moment = require('moment');
 
 module.exports = (sequelize) => {
     sequelize.define('record', {
-        userId: Sequelize.STRING, //答题人
-        rightNum: Sequelize.INTEGER, //答对数目
-        wrongNum: Sequelize.INTEGER, //答错数目
-        time: Sequelize.STRING,//花费时间单位秒
-        type: Sequelize.STRING, //试卷的题目类型以~符号进行分割
-        subject: Sequelize.STRING, //试卷的科目
-        difficulty: Sequelize.STRING, //试卷的难度 
+        userId: Sequelize.STRING,
+        rightNum: Sequelize.INTEGER,
+        wrongNum: Sequelize.INTEGER,
+        time: Sequelize.STRING,
+        type: Sequelize.STRING,
+        subject: Sequelize.STRING,
+        difficulty: Sequelize.STRING,
         created_at: {
             type: Sequelize.DATE,
             get() {

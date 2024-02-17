@@ -3,9 +3,9 @@ const moment = require('moment');
 
 module.exports = (sequelize) => {
     sequelize.define('operation', {
-        userId: Sequelize.STRING, // 操作人
-        questionId: Sequelize.STRING, //操作题目
-        type: Sequelize.STRING, //操作类型 Like Dislike
+        userId: Sequelize.STRING,
+        questionId: Sequelize.STRING,
+        type: Sequelize.STRING,
         created_at: {
             type: Sequelize.DATE,
             get() {

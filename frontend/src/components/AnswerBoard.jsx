@@ -109,7 +109,6 @@ export default function AnswerBoard() {
   const [options, setOptions] = useState([]);
   useEffect(() => {
     if (questionsArr.length) {
-      // console.log("questionsArr = ", questionsArr);
       const optArr = questionsArr[curIndex].options.split("~").map((item) => {
         return {
           isAnswer: false,
@@ -151,13 +150,6 @@ export default function AnswerBoard() {
         { value: rightNum, name: "Correct Number" },
         { value: wrongNum, name: "Wrong Number" },
       ]);
-      // console.log("userId = ", JSON.parse(window.localStorage.userinfo).id);
-      // console.log("rightNum = ", rightNum);
-      // console.log("wrongNum = ", wrongNum);
-      // console.log("time = ", time);
-      // console.log("type = ", config.type.join("~"));
-      // console.log("subject = ", config.subject);
-      // console.log("difficulty = ", config.difficulty);
       fetchData({
         url: "/record",
         method: "POST",
@@ -226,7 +218,6 @@ export default function AnswerBoard() {
   };
 
   useEffect(() => {
-    // initPie();
     console.log("config = ", window.sessionStorage.config);
     if (window.sessionStorage.config) {
       let configObj = JSON.parse(window.sessionStorage.config);
@@ -352,14 +343,14 @@ export default function AnswerBoard() {
                 let answer = questionsArr[curIndex].answer;
                 console.log("answer = ", answer);
                 let deepAnswerRecords = [...answerRecords];
-                // right
+
                 if (answer == answersStr) {
                   deepAnswerRecords.push("right");
                   if (config.isPractice) {
                     setCurRes(true);
                   }
                 } else {
-                  // wrong
+
                   deepAnswerRecords.push("wrong");
                   if (config.isPractice) {
                     setCurRes(false);
@@ -398,7 +389,6 @@ export default function AnswerBoard() {
                 setIsRunning={setIsRunning}
                 initialTime={100}
                 onTimerComplete={() => {
-                  // console.log("answerRecords = ", answerRecords);
                   let deepAnswerRecords = [...answerRecords];
                   let isAnswerArr = options.filter((v) => {
                     return v.isAnswer;
@@ -416,14 +406,14 @@ export default function AnswerBoard() {
                     console.log("answersStr = ", answersStr);
                     let answer = questionsArr[curIndex].answer;
                     console.log("answer = ", answer);
-                    // right
+
                     if (answer == answersStr) {
                       deepAnswerRecords.push("right");
                       if (config.isPractice) {
                         setCurRes(true);
                       }
                     } else {
-                      // wrong
+
                       deepAnswerRecords.push("wrong");
                       if (config.isPractice) {
                         setCurRes(false);
@@ -701,12 +691,7 @@ export default function AnswerBoard() {
                               !newOptions[index].isAnswer;
                           }
                           setOptions(newOptions);
-                          // const myAnswerIds = [];
-                          // newOptions.forEach((item, index) => {
-                          //   if (item.isAnswer) {
-                          //     myAnswerIds.push(index);
-                          //   }
-                          // });
+
                         }}
                         size="small"
                         type={item.isAnswer ? "primary" : "default"}
@@ -760,11 +745,7 @@ export default function AnswerBoard() {
             </div>
             <div
               onClick={async () => {
-                // if (curOpt == "Dislike") {
-                //   setCurOpt("");
-                // } else {
-                //   setCurOpt("Dislike");
-                // }
+
 
                 if (curOpt == "Dislike") {
                   await fetchData({
