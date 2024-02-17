@@ -7,4 +7,4 @@ Create personalized quizzes to test yourself and self-empower your learning with
 
 ### Technologies Used:
 
-## GHow to Install and Run
+## How to Install and Run
