@@ -1,0 +1,93 @@
+.box {
+    /* display: flex; */
+
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+}
+
+.r {
+    font-size: 30px;
+    color: #52c41a;
+}
+
+.w {
+    font-size: 30px;
+    color: #ff4d4f;
+}
+
+.options {
+    margin-top: 30px;
+}
+
+.table {
+    width: 100%;
+    overflow: auto hidden;
+}
+
+.cardHead {
+    display: flex;
+    align-items: center;
+}
+
+.optBox {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: #888;
+}
+
+.optItem {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.chartBox {
+    /* border: 1px solid red; */
+    display: flex;
+    
+}
+.chartLeft{
+    width: 50%;
+    padding: 30px;
+}
+.circleItemBox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.circleItem{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: rgb(160, 217, 17);
+}
+
+.circleItemR{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: #f5222d;
+}
+.pieBox {
+    width: 50%;
+    height: 255px;
+    padding-top: 30px;
+}
+

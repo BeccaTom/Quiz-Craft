@@ -1,0 +1,32 @@
+.addGameBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .container {
+        padding: 50px;
+        background-color: white;
+
+        .SearchBox {
+            padding: 30px 0;
+        }
+
+        .functionalDomain {
+            padding: 10px 0 30px 0 !important;
+        }
+
+        .smallBtn {
+            font-size: 12px;
+        }
+    }
+
+    margin-bottom: 20px;
+}
+
+.optBox {
+    margin: 10px 0 0;
+}
+
+.danger {
+    color: red;
+}

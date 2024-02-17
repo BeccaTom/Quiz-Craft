@@ -1,0 +1,46 @@
+.nav {
+    background: #1890ff;
+}
+
+.navBox {
+    height: 50px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.navLeft {
+    display: flex;
+    align-items: center;
+
+}
+
+.navTit {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 50px;
+}
+
+.logo {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+.navLink {
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.mainBox {
+    margin: 30px auto;
+    max-width: 1000px;
+}

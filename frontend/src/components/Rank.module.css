@@ -1,0 +1,24 @@
+.box{
+    max-width: 650px;
+    margin: auto;
+}
+.table{
+    margin-top: 30px;
+}
+.rankHead{
+    height: 150px;
+    background: linear-gradient(to bottom, #53a1e9, #1890ff);
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rankTit{
+    font-size: 25px;
+    font-weight: bold;
+}
+.jb{
+    width: 100px;
+    margin-left: 100px;
+}

@@ -1,0 +1,25 @@
+.addGameBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.bannerBox{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.banner{
+    width: 50%;
+}
+.optBox{
+    margin: 10px 0 0;
+}
+.danger{
+    color: red;
+}
+.cardBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
