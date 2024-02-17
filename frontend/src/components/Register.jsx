@@ -1,8 +1,14 @@
-import React from "react";
-import { Card, Form, Input, Button, Space, message, Row, Col } from "antd";
-import { useNavigate } from "react-router-dom";
-import fetchData from "../common/fetchData";
-import sty from "./Register.module.css";
+import React from 'react';
+import {
+  Card, Form, Input, Button, Space, message, Row, Col,
+} from 'antd';
+import { useNavigate } from 'react-router-dom';
+import fetchData from '../common/fetchData';
+import sty from './Register.module.css';
+
+/* Register: The registration page displays a form
+that allows users to create a new account in the app's
+mySQL database by submitting their name, email, and password. */
 
 export default function Register() {
   const navigate = useNavigate();
@@ -10,14 +16,16 @@ export default function Register() {
   const onFinish = async (data) => {
     try {
       const res = await fetchData({
-        url: "/user/register",
-        method: "POST",
+        url: '/user/register',
+        method: 'POST',
         data,
       });
-      window.localStorage.setItem("userinfo", JSON.stringify(res.data));
-      message.success("Registration successful!");
-      navigate("/");
-    } catch (error) {}
+      window.localStorage.setItem('userinfo', JSON.stringify(res.data));
+      message.success('Registration successful!');
+      navigate('/');
+    } catch (error) {
+      message.error('There was an error registering a new user.');
+    }
   };
 
   return (
@@ -38,14 +46,14 @@ export default function Register() {
           <Form.Item
             label="Name"
             name="name"
-            rules={[{ required: true, message: "Name cannot be empty!" }]}
+            rules={[{ required: true, message: 'Name cannot be empty!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Email cannot be empty!" }]}
+            rules={[{ required: true, message: 'Email cannot be empty!' }]}
           >
             <Input />
           </Form.Item>
@@ -56,7 +64,7 @@ export default function Register() {
             rules={[
               {
                 required: true,
-                message: "Password cannot be empty!",
+                message: 'Password cannot be empty!',
               },
             ]}
           >
@@ -83,7 +91,7 @@ export default function Register() {
             <Col>
               <Button
                 onClick={() => {
-                  navigate("/login");
+                  navigate('/login');
                 }}
                 type="link"
               >

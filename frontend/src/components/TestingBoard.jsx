@@ -1,24 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import fetchData from "../common/fetchData";
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Card,
   Button,
   Tag,
   Input,
-  Table,
   Statistic,
-  Image,
   Result,
   Typography,
   Row,
   Col,
-  Badge,
   Space,
   message,
-} from "antd";
-import * as echarts from "echarts";
-import dayjs from "dayjs";
+} from 'antd';
+import * as echarts from 'echarts';
+import dayjs from 'dayjs';
 import {
   CheckCircleOutlined,
   RightCircleOutlined,
@@ -30,19 +26,30 @@ import {
   ReloadOutlined,
   TrophyOutlined,
   ClockCircleOutlined,
-} from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
-import sty from "./AnswerBoard.module.css";
+} from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import fetchData from '../common/fetchData';
+import sty from './TestingBoard.module.css';
 
 const { Paragraph, Text } = Typography;
 
-const CountdownTimer = ({
+/* TestingBoard: The testing board is what appears after a user
+clicks the "Start" button on the homepage, prompting the beginning
+of question-answering/testing. If the user enabled the stopwatch
+beforehand, a timer will start, and questions will be displayed for
+users to submit answers for. Their correct and incorrect answers are
+recorded and after completing the test, the page displays a pie chart
+of their correct vs. incorrect answer ratio, as well as their score
+out of ten and as a percentage. */
+
+function CountdownTimer({
   initialTime,
   onTimerComplete,
   isRunning,
   setIsRunning,
-}) => {
+}) {
   const [time, setTime] = useState(initialTime);
+
   useEffect(() => {
     let intervalId;
     if (isRunning && time > 0) {
@@ -59,14 +66,14 @@ const CountdownTimer = ({
     };
   }, [isRunning, time, onTimerComplete]);
 
-  const formatTime = (time) => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
+  const formatTime = (usedtime) => {
+    const hours = Math.floor(usedtime / 3600);
+    const minutes = Math.floor((usedtime % 3600) / 60);
+    const seconds = usedtime % 60;
 
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
       .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     return formattedTime;
   };
 
@@ -86,9 +93,9 @@ const CountdownTimer = ({
       </h2>
     </div>
   );
-};
+}
 
-export default function AnswerBoard() {
+export default function TestingBoard() {
   const navigate = useNavigate();
   const [flag, setFlag] = useState(false);
   const [config, setConfig] = useState({});
@@ -96,8 +103,8 @@ export default function AnswerBoard() {
   const [isFinished, setIsFinished] = useState(false);
   const [answerRecords, setAnswerRecords] = useState([]);
   const [staticData, setStaticData] = useState({
-    correctNum: "",
-    score: "",
+    correctNum: '',
+    score: '',
     time: dayjs(),
     details: [],
     data: [],
@@ -105,145 +112,8 @@ export default function AnswerBoard() {
   const [questionsArr, setQuestionsArr] = useState([]);
   const [curIndex, setCurIndex] = useState(0);
   const [curRes, setCurRes] = useState(null);
-  const [curOpt, setCurOpt] = useState("");
+  const [curOpt, setCurOpt] = useState('');
   const [options, setOptions] = useState([]);
-  useEffect(() => {
-    if (questionsArr.length) {
-      const optArr = questionsArr[curIndex].options.split("~").map((item) => {
-        return {
-          isAnswer: false,
-          value: item,
-        };
-      });
-      setOptions(optArr);
-      getOptData();
-    }
-  }, [curIndex, questionsArr]);
-  const difficultyColorMap = {
-    Easy: "success",
-    Medium: "warning",
-    Difficult: "error",
-  };
-  const typeColorMap = {
-    "True/False": "cyan",
-    Single: "blue",
-    Multiple: "purple",
-  };
-
-  useEffect(() => {
-    if (isFinished) {
-      console.log("a = ", answerRecords);
-      let wrongNum = answerRecords.filter((v) => {
-        return v == "wrong";
-      }).length;
-      let rightNum = answerRecords.filter((v) => {
-        return v == "right";
-      }).length;
-      let time = dayjs().diff(staticData.time, "second");
-      setStaticData({
-        correctNum: rightNum,
-        score: (rightNum / answerRecords.length) * 100,
-        time,
-        details: answerRecords,
-      });
-      initPie([
-        { value: rightNum, name: "Correct Number" },
-        { value: wrongNum, name: "Wrong Number" },
-      ]);
-      fetchData({
-        url: "/record",
-        method: "POST",
-        data: {
-          userId: JSON.parse(window.localStorage.userinfo).id,
-          rightNum,
-          wrongNum,
-          time,
-          type: config.type.join("~"),
-          subject: config.subject,
-          difficulty: config.difficulty,
-        },
-      });
-    }
-  }, [isFinished]);
-
-  const initPie = (data) => {
-    let chartDom = document.getElementById("pieBox");
-    let myChart = echarts.init(chartDom);
-    let option;
-
-    option = {
-      title: {
-        text: "Your Performance",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        orient: "vertical",
-        left: "right",
-      },
-      series: [
-        {
-          name: "",
-          type: "pie",
-          radius: ["40%", "70%"],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: "#fff",
-            borderWidth: 2,
-          },
-          label: {
-            show: false,
-            position: "center",
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 14,
-              fontWeight: "bold",
-            },
-          },
-          labelLine: {
-            show: false,
-          },
-          data,
-          color: ["rgb(160, 217, 17)", "#f5222d"],
-        },
-      ],
-    };
-
-    option && myChart.setOption(option);
-  };
-
-  useEffect(() => {
-    console.log("config = ", window.sessionStorage.config);
-    if (window.sessionStorage.config) {
-      let configObj = JSON.parse(window.sessionStorage.config);
-      configObj.isPractice = configObj.mode == "test" ? false : true;
-      console.log("configObj = ", configObj);
-      getData(configObj);
-      setConfig(configObj);
-    }
-  }, []);
-
-  const getData = async (params) => {
-    try {
-      const { difficulty, subject, type } = params;
-      const res = await fetchData({
-        url: "/question/random",
-        method: "GET",
-        params: {
-          difficulty,
-          subject,
-          type: type.join("~"),
-        },
-      });
-      console.log("res = ", res);
-      setQuestionsArr(res.data);
-    } catch (error) {}
-  };
 
   const [optObj, setOptObj] = useState({
     like: false,
@@ -254,32 +124,161 @@ export default function AnswerBoard() {
 
   const getOptData = async () => {
     const res = await fetchData({
-      url: "/operation/statics",
-      method: "GET",
+      url: '/operation/statics',
+      method: 'GET',
       params: {
         userId: JSON.parse(window.localStorage.userinfo).id,
         questionId: questionsArr[curIndex].id,
       },
     });
     setOptObj(res.data);
-    console.log("res.data666 = ", res.data);
     if (res.data.like) {
-      setCurOpt("Like");
+      setCurOpt('Like');
     }
     if (res.data.disLike) {
-      setCurOpt("Dislike");
+      setCurOpt('Dislike');
     }
 
     if (!res.data.like && !res.data.disLike) {
-      setCurOpt("");
+      setCurOpt('');
     }
-
-    console.log("res666 = ", res);
   };
-  console.log("curOpt= ", curOpt);
+
+  const initPie = (data) => {
+    const chartDom = document.getElementById('pieBox');
+    const myChart = echarts.init(chartDom);
+    let option;
+
+    option = {
+      title: {
+        text: 'Your Performance',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'right',
+      },
+      series: [
+        {
+          name: '',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 14,
+              fontWeight: 'bold',
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data,
+          color: ['rgb(160, 217, 17)', '#f5222d'],
+        },
+      ],
+    };
+
+    if (option && myChart) {
+      myChart.setOption(option);
+    }
+  };
+
+  useEffect(() => {
+    if (questionsArr.length) {
+      const optArr = questionsArr[curIndex].options.split('~').map((item) => ({
+        isAnswer: false,
+        value: item,
+      }));
+      setOptions(optArr);
+      getOptData();
+    }
+  }, [curIndex, questionsArr]);
+  const difficultyColorMap = {
+    Easy: 'success',
+    Medium: 'warning',
+    Difficult: 'error',
+  };
+  const typeColorMap = {
+    'True/False': 'cyan',
+    Single: 'blue',
+    Multiple: 'purple',
+  };
+
+  useEffect(() => {
+    if (isFinished) {
+      const wrongNum = answerRecords.filter((v) => v === 'wrong').length;
+      const rightNum = answerRecords.filter((v) => v === 'right').length;
+      const time = dayjs().diff(staticData.time, 'second');
+      setStaticData({
+        correctNum: rightNum,
+        score: (rightNum / answerRecords.length) * 100,
+        time,
+        details: answerRecords,
+      });
+      initPie([
+        { value: rightNum, name: 'Correct Number' },
+        { value: wrongNum, name: 'Wrong Number' },
+      ]);
+      fetchData({
+        url: '/record',
+        method: 'POST',
+        data: {
+          userId: JSON.parse(window.localStorage.userinfo).id,
+          rightNum,
+          wrongNum,
+          time,
+          type: config.type.join('~'),
+          subject: config.subject,
+          difficulty: config.difficulty,
+        },
+      });
+    }
+  }, [isFinished]);
+
+  const getData = async (params) => {
+    try {
+      const { difficulty, subject, type } = params;
+      const res = await fetchData({
+        url: '/question/random',
+        method: 'GET',
+        params: {
+          difficulty,
+          subject,
+          type: type.join('~'),
+        },
+      });
+      setQuestionsArr(res.data);
+    } catch (error) {
+      message.error('There was an error fetching the data.')
+    };
+  };
+
+  useEffect(() => {
+    if (window.sessionStorage.config) {
+      const configObj = JSON.parse(window.sessionStorage.config);
+      configObj.isPractice = configObj.mode !== 'test';
+      getData(configObj);
+      setConfig(configObj);
+    }
+  }, []);
+
   return (
     <Card
-      extra={
+      extra={(
         <Space>
           {isFinished && (
             <Button
@@ -289,7 +288,7 @@ export default function AnswerBoard() {
               icon={<ReloadOutlined />}
               type="primary"
               onClick={() => {
-                navigate("/");
+                navigate('/');
               }}
             >
               Restart
@@ -305,21 +304,19 @@ export default function AnswerBoard() {
                 isRunning ? <PauseCircleOutlined /> : <PlayCircleOutlined />
               }
               type="primary"
-              danger={isRunning ? true : false}
+              danger={!!isRunning}
               onClick={() => {
-                setIsRunning((preState) => {
-                  return !preState;
-                });
+                setIsRunning((preState) => !preState);
               }}
             >
-              {isRunning ? "Pause" : "Resume"}
+              {isRunning ? 'Pause' : 'Resume'}
             </Button>
           )}
           {!isFinished && (
             <Button
               disabled={isFinished || (config.isPractice && flag)}
               icon={
-                curIndex == questionsArr.length - 1 || config.isPractice ? (
+                curIndex === questionsArr.length - 1 || config.isPractice ? (
                   <SendOutlined />
                 ) : (
                   <RightCircleOutlined />
@@ -327,59 +324,48 @@ export default function AnswerBoard() {
               }
               type="primary"
               onClick={() => {
-                console.log("options = ", options);
-                let isAnswerArr = options.filter((v) => {
-                  return v.isAnswer;
-                });
-                if (isAnswerArr.length == 0) {
-                  message.error("Please select an option!");
+                const isAnswerArr = options.filter((v) => v.isAnswer);
+                if (isAnswerArr.length === 0) {
+                  message.error('Please select an option!');
                   return;
                 }
-                let answersArr = isAnswerArr.map((v) => {
-                  return v.value;
-                });
-                let answersStr = answersArr.join("~");
-                console.log("answersStr = ", answersStr);
-                let answer = questionsArr[curIndex].answer;
-                console.log("answer = ", answer);
-                let deepAnswerRecords = [...answerRecords];
+                const answersArr = isAnswerArr.map((v) => v.value);
+                const answersStr = answersArr.join('~');
+                const { answer } = questionsArr[curIndex];
+                const deepAnswerRecords = [...answerRecords];
 
-                if (answer == answersStr) {
-                  deepAnswerRecords.push("right");
+                if (answer === answersStr) {
+                  deepAnswerRecords.push('right');
                   if (config.isPractice) {
                     setCurRes(true);
                   }
                 } else {
-
-                  deepAnswerRecords.push("wrong");
+                  deepAnswerRecords.push('wrong');
                   if (config.isPractice) {
                     setCurRes(false);
                   }
                 }
-                console.log("deepAnswerRecords = ", deepAnswerRecords);
                 setAnswerRecords(deepAnswerRecords);
                 if (!config.isPractice) {
-                  if (curIndex == questionsArr.length - 1) {
+                  if (curIndex === questionsArr.length - 1) {
                     setIsFinished(true);
                     setIsRunning(false);
                     return;
                   }
-                  setCurIndex((pre) => {
-                    return pre + 1;
-                  });
+                  setCurIndex((pre) => pre + 1);
                 } else {
                   setFlag(true);
                 }
               }}
             >
-              {curIndex == questionsArr.length - 1 || config.isPractice
-                ? "Submit"
-                : "Next"}
+              {curIndex === questionsArr.length - 1 || config.isPractice
+                ? 'Submit'
+                : 'Next'}
             </Button>
           )}
         </Space>
-      }
-      title={
+      )}
+      title={(
         <div>
           {isFinished && <h2>Test Results</h2>}
           {!isFinished && config.timer && (
@@ -389,49 +375,39 @@ export default function AnswerBoard() {
                 setIsRunning={setIsRunning}
                 initialTime={100}
                 onTimerComplete={() => {
-                  let deepAnswerRecords = [...answerRecords];
-                  let isAnswerArr = options.filter((v) => {
-                    return v.isAnswer;
-                  });
-                  if (isAnswerArr.length == 0) {
-                    deepAnswerRecords.push("wrong");
+                  const deepAnswerRecords = [...answerRecords];
+                  const isAnswerArr = options.filter((v) => v.isAnswer);
+                  if (isAnswerArr.length === 0) {
+                    deepAnswerRecords.push('wrong');
                     if (config.isPractice) {
                       setCurRes(false);
                     }
                   } else {
-                    let answersArr = isAnswerArr.map((v) => {
-                      return v.value;
-                    });
-                    let answersStr = answersArr.join("~");
-                    console.log("answersStr = ", answersStr);
-                    let answer = questionsArr[curIndex].answer;
-                    console.log("answer = ", answer);
+                    const answersArr = isAnswerArr.map((v) => v.value);
+                    const answersStr = answersArr.join('~');
+                    const { answer } = questionsArr[curIndex];
 
-                    if (answer == answersStr) {
-                      deepAnswerRecords.push("right");
+                    if (answer === answersStr) {
+                      deepAnswerRecords.push('right');
                       if (config.isPractice) {
                         setCurRes(true);
                       }
                     } else {
-
-                      deepAnswerRecords.push("wrong");
+                      deepAnswerRecords.push('wrong');
                       if (config.isPractice) {
                         setCurRes(false);
                       }
                     }
                   }
-                  let len = questionsArr.length - deepAnswerRecords.length;
+                  const len = questionsArr.length - deepAnswerRecords.length;
                   if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                      deepAnswerRecords.push("wrong");
+                    for (let i = 0; i < len; i + 1) {
+                      deepAnswerRecords.push('wrong');
                     }
-                    console.log("deepAnswerRecords = ", deepAnswerRecords);
-                    setAnswerRecords(deepAnswerRecords);
                   }
                   if (!config.isPractice) {
                     setIsFinished(true);
                   }
-                  console.log("Finished counting down...");
                 }}
               />
               <Tag
@@ -443,36 +419,45 @@ export default function AnswerBoard() {
                 {questionsArr[curIndex]?.type}
               </Tag>
               <Tag>{questionsArr[curIndex]?.subject}</Tag>
-              Question {curIndex + 1} of {questionsArr.length}
+              Question
+              {' '}
+              {curIndex + 1}
+              {' '}
+              of
+              {' '}
+              {questionsArr.length}
             </div>
           )}
         </div>
-      }
+      )}
       className={sty.box}
     >
       {isFinished === true && (
         <div className={sty.resultBox}>
           <h1
             style={{
-              textAlign: "center",
+              textAlign: 'center',
             }}
           >
-            You got{" "}
+            You got
+            {' '}
             <span
               style={{
-                color: "#a0d911",
+                color: '#a0d911',
                 fontSize: 50,
-                margin: "0 10px",
+                margin: '0 10px',
               }}
             >
               {staticData.correctNum}
-            </span>{" "}
-            questions correct out of{" "}
+            </span>
+            {' '}
+            questions correct out of
+            {' '}
             <span
               style={{
-                color: "#1890ff",
+                color: '#1890ff',
                 fontSize: 50,
-                margin: "0 10px",
+                margin: '0 10px',
               }}
             >
               10
@@ -480,7 +465,7 @@ export default function AnswerBoard() {
           </h1>
           <div
             style={{
-              background: "#ececec",
+              background: '#ececec',
               padding: 30,
             }}
           >
@@ -492,7 +477,7 @@ export default function AnswerBoard() {
                     value={staticData.score}
                     precision={2}
                     valueStyle={{
-                      color: "#3f8600",
+                      color: '#3f8600',
                     }}
                     prefix={<TrophyOutlined />}
                     suffix="%"
@@ -506,7 +491,7 @@ export default function AnswerBoard() {
                     value={staticData.time}
                     precision={2}
                     valueStyle={{
-                      color: "#1890ff",
+                      color: '#1890ff',
                     }}
                     prefix={<ClockCircleOutlined />}
                     suffix="s"
@@ -519,7 +504,7 @@ export default function AnswerBoard() {
             <div className={sty.chartLeft}>
               <h2
                 style={{
-                  textAlign: "center",
+                  textAlign: 'center',
                   marginBottom: 30,
                 }}
               >
@@ -532,7 +517,7 @@ export default function AnswerBoard() {
                 }}
               >
                 {staticData.details.slice(0, 5).map((item, index) => {
-                  let bol = item == "right";
+                  const bol = item === 'right';
                   return bol ? (
                     <div className={sty.circleItem}>{index + 1}</div>
                   ) : (
@@ -542,7 +527,7 @@ export default function AnswerBoard() {
               </div>
               <div className={sty.circleItemBox}>
                 {staticData.details.slice(5, 10).map((item, index) => {
-                  let bol = item == "right";
+                  const bol = item === 'right';
                   return bol ? (
                     <div className={sty.circleItem}>{index + 6}</div>
                   ) : (
@@ -551,7 +536,7 @@ export default function AnswerBoard() {
                 })}
               </div>
             </div>
-            <div id="pieBox" className={sty.pieBox}></div>
+            <div id="pieBox" className={sty.pieBox} />
           </div>
         </div>
       )}
@@ -562,10 +547,10 @@ export default function AnswerBoard() {
             <Result
               status="success"
               title="Correct Answer"
-              extra={
+              extra={(
                 <Button
                   icon={
-                    curIndex == questionsArr.length - 1 ? (
+                    curIndex === questionsArr.length - 1 ? (
                       <SendOutlined />
                     ) : (
                       <RightCircleOutlined />
@@ -575,19 +560,17 @@ export default function AnswerBoard() {
                   onClick={() => {
                     setCurRes(null);
                     setFlag(false);
-                    if (curIndex == questionsArr.length - 1) {
+                    if (curIndex === questionsArr.length - 1) {
                       setIsFinished(true);
                       setIsRunning(false);
                       return;
                     }
-                    setCurIndex((pre) => {
-                      return pre + 1;
-                    });
+                    setCurIndex((pre) => pre + 1);
                   }}
                 >
-                  {curIndex == questionsArr.length - 1 ? "Submit" : "Next"}
+                  {curIndex === questionsArr.length - 1 ? 'Submit' : 'Next'}
                 </Button>
-              }
+              )}
             >
               <Paragraph>
                 <Text
@@ -606,10 +589,10 @@ export default function AnswerBoard() {
             <Result
               status="error"
               title="Incorrect Answer"
-              extra={
+              extra={(
                 <Button
                   icon={
-                    curIndex == questionsArr.length - 1 ? (
+                    curIndex === questionsArr.length - 1 ? (
                       <SendOutlined />
                     ) : (
                       <RightCircleOutlined />
@@ -619,19 +602,17 @@ export default function AnswerBoard() {
                   onClick={() => {
                     setCurRes(null);
                     setFlag(false);
-                    if (curIndex == questionsArr.length - 1) {
+                    if (curIndex === questionsArr.length - 1) {
                       setIsFinished(true);
                       setIsRunning(false);
                       return;
                     }
-                    setCurIndex((pre) => {
-                      return pre + 1;
-                    });
+                    setCurIndex((pre) => pre + 1);
                   }}
                 >
-                  {curIndex == questionsArr.length - 1 ? "Submit" : "Next"}
+                  {curIndex === questionsArr.length - 1 ? 'Submit' : 'Next'}
                 </Button>
-              }
+              )}
             >
               <Paragraph>
                 <Text
@@ -644,10 +625,8 @@ export default function AnswerBoard() {
                 </Text>
               </Paragraph>
               {questionsArr[curIndex]?.answer
-                ?.split("~")
-                ?.map((item, index) => {
-                  return <Paragraph key={item}>{item}</Paragraph>;
-                })}
+                ?.split('~')
+                ?.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
               <Paragraph>
                 <Text
                   strong
@@ -664,66 +643,61 @@ export default function AnswerBoard() {
 
           <div className={sty.center}>
             <div className={sty.options}>
-              {options.map((item, index) => {
-                return (
-                  <Form.Item key={index} colon={false}>
-                    <Space>
-                      <Input
-                        style={{
-                          border: 0,
-                        }}
-                        value={item.value}
-                        readOnly
-                      ></Input>
-                      <Button
-                        disabled={isFinished}
-                        onClick={async () => {
-                          const newOptions = [...options];
-                          const qType = questionsArr[curIndex].type;
-                          console.log("qType = ", qType);
-                          if (qType == "Single" || qType == "True/False") {
-                            newOptions.forEach((optionItem) => {
-                              optionItem.isAnswer = false;
-                            });
-                            newOptions[index].isAnswer = true;
-                          } else {
-                            newOptions[index].isAnswer =
-                              !newOptions[index].isAnswer;
-                          }
-                          setOptions(newOptions);
-
-                        }}
-                        size="small"
-                        type={item.isAnswer ? "primary" : "default"}
-                        shape="circle"
-                        icon={<CheckCircleOutlined />}
-                      />
-                    </Space>
-                  </Form.Item>
-                );
-              })}
+              {options.map((item, index) => (
+                <Form.Item key={index} colon={false}>
+                  <Space>
+                    <Input
+                      style={{
+                        border: 0,
+                      }}
+                      value={item.value}
+                      readOnly
+                    />
+                    <Button
+                      disabled={isFinished}
+                      onClick={async () => {
+                        const newOptions = [...options];
+                        const qType = questionsArr[curIndex].type;
+                        if (qType === 'Single' || qType === 'True/False') {
+                          newOptions.forEach((optionItem) => {
+                            optionItem.isAnswer = false;
+                          });
+                          newOptions[index].isAnswer = true;
+                        } else {
+                          newOptions[index].isAnswer = !newOptions[index].isAnswer;
+                        }
+                        setOptions(newOptions);
+                      }}
+                      size="small"
+                      type={item.isAnswer ? 'primary' : 'default'}
+                      shape="circle"
+                      icon={<CheckCircleOutlined />}
+                    />
+                  </Space>
+                </Form.Item>
+              ))}
             </div>
           </div>
           <div className={sty.optBox}>
             <div
               onClick={async () => {
-                if (curOpt == "Like") {
+                if (curOpt === 'Like') {
                   await fetchData({
-                    url: `/operation/del`,
-                    method: "POST",
+                    url: '/operation/del',
+                    method: 'POST',
                     data: {
                       userId: JSON.parse(window.localStorage.userinfo).id,
                       questionId: questionsArr[curIndex].id,
-                      type: "Like",
+                      type: 'Like',
                     },
                   });
                   getOptData();
                 } else {
                   await fetchData({
-                    url: `/operation`,
-                    method: "POST",
+                    url: '/operation',
+                    method: 'POST',
                     data: {
-                      type: "Like",
+                      type: 'Like',
                       userId: JSON.parse(window.localStorage.userinfo).id,
                       questionId: questionsArr[curIndex].id,
                     },
@@ -738,32 +712,30 @@ export default function AnswerBoard() {
             >
               <LikeOutlined
                 style={{
-                  color: curOpt == "Like" ? "#1890ff" : "#888",
+                  color: curOpt === 'Like' ? '#1890ff' : '#888',
                 }}
               />
               <span>{optObj.likeNum}</span>
             </div>
             <div
               onClick={async () => {
-
-
-                if (curOpt == "Dislike") {
+                if (curOpt === 'Dislike') {
                   await fetchData({
-                    url: `/operation/del`,
-                    method: "POST",
+                    url: '/operation/del',
+                    method: 'POST',
                     data: {
                       userId: JSON.parse(window.localStorage.userinfo).id,
                       questionId: questionsArr[curIndex].id,
-                      type: "Dislike",
+                      type: 'Dislike',
                     },
                   });
                   getOptData();
                 } else {
                   await fetchData({
-                    url: `/operation`,
-                    method: "POST",
+                    url: '/operation',
+                    method: 'POST',
                     data: {
-                      type: "Dislike",
+                      type: 'Dislike',
                       userId: JSON.parse(window.localStorage.userinfo).id,
                       questionId: questionsArr[curIndex].id,
                     },
@@ -775,7 +747,7 @@ export default function AnswerBoard() {
             >
               <DislikeOutlined
                 style={{
-                  color: curOpt == "Dislike" ? "#1890ff" : "#888",
+                  color: curOpt === 'Dislike' ? '#1890ff' : '#888',
                 }}
               />
               <span>{optObj.disLikeNum}</span>

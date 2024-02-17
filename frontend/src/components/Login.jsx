@@ -1,8 +1,14 @@
-import React from "react";
-import { Card, Form, Input, Button, Space, message, Row, Col } from "antd";
-import { useNavigate } from "react-router-dom";
-import fetchData from "../common/fetchData";
-import sty from "./Login.module.css";
+import React from 'react';
+import {
+  Card, Form, Input, Button, Space, message, Row, Col,
+} from 'antd';
+import { useNavigate } from 'react-router-dom';
+import fetchData from '../common/fetchData';
+import sty from './Login.module.css';
+
+/* Login: The login page displays a form where you can login with your email and password
+if you already have an account. It also gives an option to go to the registration page
+if you don't have an account yet. */
 
 export default function Login() {
   const navigate = useNavigate();
@@ -10,14 +16,16 @@ export default function Login() {
   const onFinish = async (data) => {
     try {
       const res = await fetchData({
-        url: "/user/login",
-        method: "POST",
+        url: '/user/login',
+        method: 'POST',
         data,
       });
-      window.localStorage.setItem("userinfo", JSON.stringify(res.data));
-      message.success("Login successful!");
-      navigate("/");
-    } catch (error) {}
+      window.localStorage.setItem('userinfo', JSON.stringify(res.data));
+      message.success('Login successful!');
+      navigate('/');
+    } catch (error) {
+      message.error('There was an error logging you in.');
+    }
   };
 
   return (
@@ -38,7 +46,7 @@ export default function Login() {
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Email cannot be empty!" }]}
+            rules={[{ required: true, message: 'Email cannot be empty!' }]}
           >
             <Input />
           </Form.Item>
@@ -49,7 +57,7 @@ export default function Login() {
             rules={[
               {
                 required: true,
-                message: "Password cannot be empty!",
+                message: 'Password cannot be empty!',
               },
             ]}
           >
@@ -77,7 +85,7 @@ export default function Login() {
             <Col>
               <Button
                 onClick={() => {
-                  navigate("/register");
+                  navigate('/register');
                 }}
                 type="link"
               >

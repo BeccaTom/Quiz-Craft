@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   message,
   Pagination,
@@ -12,37 +12,44 @@ import {
   Popconfirm,
   Tag,
   Card,
-} from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
+} from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import sty from './QuestionManager.module.css';
+import request from '../common/fetchData';
+
 const { TextArea } = Input;
-import sty from "./Question.module.css";
-import request from "../common/fetchData";
 const { Option } = Select;
 
-export default function Question() {
+/* QuestionManager: The question manager page displays a list of all the questions
+existing inside the app's MySQL database, along with their corresponding labels
+(such as difficulty level, subject matter, and format). There is also a button
+which leads to a page for creating a new question. Users also have the option to
+edit or delete existing questions. */
+
+export default function QuestionManager() {
   const [form] = Form.useForm();
   const [options, setOptions] = useState([
     {
-      value: "",
+      value: '',
     },
     {
-      value: "",
+      value: '',
     },
   ]);
   const [modelForm] = Form.useForm();
   const [query, setQuery] = useState({
     index: 1,
-    title: "",
+    title: '',
   });
 
   const [source, setSource] = useState({ data: [] });
   const [currentItem, setCurrentItem] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentOperation, setCurrentOperation] = useState("ADD");
+  const [currentOperation, setCurrentOperation] = useState('ADD');
 
   const OPERATION_MAP_TEXT = {
-    ADD: "Create New Question",
-    EDIT: "Edit Question",
+    ADD: 'Create New Question',
+    EDIT: 'Edit Question',
   };
   const showModal = () => {
     setIsModalVisible(true);
@@ -57,13 +64,12 @@ export default function Question() {
 
   const getData = () => {
     request({
-      url: `/question`,
-      method: "get",
+      url: '/question',
+      method: 'get',
       params: {
         ...query,
       },
     }).then((res) => {
-      console.log("res = ", res);
       setSource({
         data: res.data.rows,
         total: res.data.count,
@@ -74,10 +80,10 @@ export default function Question() {
   const remove = (id) => {
     request({
       url: `/question/${id}`,
-      method: "delete",
+      method: 'delete',
     }).then(() => {
       getData();
-      message.success("Successfully deleted!");
+      message.success('Successfully deleted!');
     });
   };
 
@@ -95,59 +101,57 @@ export default function Question() {
 
   const columns = [
     {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
-      title: "Subject",
-      dataIndex: "subject",
-      key: "subject",
-      render: (text, record) => {
-        return <Tag>{record.subject}</Tag>;
-      },
+      title: 'Subject',
+      dataIndex: 'subject',
+      key: 'subject',
+      render: (text, record) => <Tag>{record.subject}</Tag>,
     },
     {
-      title: "Question Type",
-      dataIndex: "type",
-      key: "type",
+      title: 'Question Type',
+      dataIndex: 'type',
+      key: 'type',
       render: (text, record) => {
-        if (record.type == "Single") {
+        if (record.type === 'Single') {
           return <Tag color="blue">Single</Tag>;
         }
-        if (record.type == "Multiple") {
+        if (record.type === 'Multiple') {
           return <Tag color="purple">Multiple</Tag>;
         }
         return <Tag color="cyan">True/False</Tag>;
       },
     },
     {
-      title: "Difficulty",
-      dataIndex: "difficulty",
-      key: "difficulty",
+      title: 'Difficulty',
+      dataIndex: 'difficulty',
+      key: 'difficulty',
       render: (text, record) => {
-        if (record.difficulty == "Easy") {
+        if (record.difficulty === 'Easy') {
           return <Tag color="success">Easy</Tag>;
         }
-        if (record.difficulty == "Medium") {
+        if (record.difficulty === 'Medium') {
           return <Tag color="warning">Medium</Tag>;
         }
         return <Tag color="error">Difficult</Tag>;
       },
     },
     {
-      title: "Operation",
-      dataIndex: "operation",
-      key: "operation",
+      title: 'Operation',
+      dataIndex: 'operation',
+      key: 'operation',
       render(text, t) {
         return (
           <Space>
             <Button
               onClick={() => {
                 setIsModalVisible(true);
-                setCurrentOperation("EDIT");
+                setCurrentOperation('EDIT');
                 setCurrentItem(t);
-                let {
+                const {
                   title,
                   type,
                   options,
@@ -156,14 +160,12 @@ export default function Question() {
                   subject,
                   desc,
                 } = t;
-                let deepOptions = [];
-                let optionsArr = options.split("~");
-                let answerArr = answer.split("~");
+                const deepOptions = [];
+                const optionsArr = options.split('~');
+                const answerArr = answer.split('~');
                 optionsArr.forEach((v) => {
-                  let oIndex = answerArr.findIndex((item) => {
-                    return v == item;
-                  });
-                  if (oIndex == -1) {
+                  const oIndex = answerArr.findIndex((item) => v === item);
+                  if (oIndex === -1) {
                     deepOptions.push({
                       value: v,
                       isAnswer: false,
@@ -215,18 +217,18 @@ export default function Question() {
       <Card
         title="Manage Questions"
         className={sty.box}
-        extra={
+        extra={(
           <Button
             type="primary"
             onClick={() => {
               showModal();
-              setCurrentOperation("ADD");
+              setCurrentOperation('ADD');
               setOptions([
                 {
-                  value: "",
+                  value: '',
                 },
                 {
-                  value: "",
+                  value: '',
                 },
               ]);
               setTimeout(() => {
@@ -236,7 +238,7 @@ export default function Question() {
           >
             Create Questions
           </Button>
-        }
+        )}
       >
         <Modal
           width={800}
@@ -252,14 +254,14 @@ export default function Question() {
             wrapperCol={{ span: 18 }}
             autoComplete="off"
             onFinish={(v) => {
-              let { title, difficulty, type, subject, desc } = v;
-              let optionsStr;
-              let answerArr = [];
-              let haveEmpty = options.filter((item) => {
-                return !item.value;
-              });
+              const {
+                title, difficulty, type, subject, desc,
+              } = v;
+              const optionsStr = '';
+              const answerArr = [];
+              const haveEmpty = options.filter((item) => !item.value);
               if (haveEmpty.length) {
-                message.error("Empty options are not allowed.");
+                message.error('Empty options are not allowed.');
                 return;
               }
               const hasDuplicates = hasDuplicateValues(options);
@@ -267,24 +269,22 @@ export default function Question() {
                 message.error("You can't have duplicate options!");
                 return;
               }
-              let noAnswer = options.filter((item, index) => {
+              const noAnswer = options.filter((item) => {
                 if (item.isAnswer) {
                   answerArr.push(item.value);
                 }
                 return item.isAnswer;
               });
-              if (noAnswer.length == 0) {
-                message.error("You must select at least one answer to be correct!");
+              if (noAnswer.length === 0) {
+                message.error('You must select at least one answer to be correct!');
                 return;
               }
               optionsStr = options
-                .map((item) => {
-                  return item.value;
-                })
-                .join("~");
-              let answerStr = answerArr.join("~");
+                .map((item) => item.value)
+                .join('~');
+              const answerStr = answerArr.join('~');
 
-              let bodyData = {
+              const bodyData = {
                 title,
                 difficulty,
                 subject,
@@ -293,31 +293,30 @@ export default function Question() {
                 answer: answerStr,
                 options: optionsStr,
               };
-              if (currentOperation == "ADD") {
+              if (currentOperation === 'ADD') {
                 request({
-                  url: "/question",
-                  method: "post",
+                  url: '/question',
+                  method: 'post',
                   data: bodyData,
                 }).then((res) => {
-                  if (res.code == -1) {
+                  if (res.code === -1) {
                     message.error(res.msg);
                   } else {
-                    message.success("Successfully added!");
+                    message.success('Successfully added!');
                     getData();
                     setIsModalVisible(false);
                   }
                 });
               } else {
-
                 request({
                   url: `/question/${currentItem.id}`,
-                  method: "put",
+                  method: 'put',
                   data: bodyData,
                 }).then((res) => {
-                  if (res.code == -1) {
+                  if (res.code === -1) {
                     message.error(res.msg);
                   } else {
-                    message.success("Edited successfully!");
+                    message.success('Edited successfully!');
                     getData();
                     setIsModalVisible(false);
                   }
@@ -332,7 +331,7 @@ export default function Question() {
               rules={[
                 {
                   required: true,
-                  message: "Please enter a question title!",
+                  message: 'Please enter a question title!',
                 },
               ]}
             >
@@ -342,9 +341,9 @@ export default function Question() {
             <Form.Item
               label="Difficulty"
               name="difficulty"
-              rules={[{ required: true, message: "Please select difficulty level!" }]}
+              rules={[{ required: true, message: 'Please select difficulty level!' }]}
             >
-              <Select style={{ width: "100%" }}>
+              <Select style={{ width: '100%' }}>
                 <Option value="Easy">Easy</Option>
                 <Option value="Medium">Medium</Option>
                 <Option value="Difficult">Difficult</Option>
@@ -354,9 +353,9 @@ export default function Question() {
             <Form.Item
               label="Subject"
               name="subject"
-              rules={[{ required: true, message: "Please select a subject!" }]}
+              rules={[{ required: true, message: 'Please select a subject!' }]}
             >
-              <Select style={{ width: "100%" }}>
+              <Select style={{ width: '100%' }}>
                 <Option value="Programming">Program</Option>
                 <Option value="Math">Math</Option>
                 <Option value="Physics">Physics</Option>
@@ -368,32 +367,32 @@ export default function Question() {
               name="type"
               initialValue="Single"
               rules={[
-                { required: true, message: "Please select a question type!" },
+                { required: true, message: 'Please select a question type!' },
               ]}
             >
               <Select
                 onChange={(val) => {
-                  if (val == "True/False") {
+                  if (val === 'True/False') {
                     setOptions([
                       {
-                        value: "Right",
+                        value: 'Right',
                       },
                       {
-                        value: "Wrong",
+                        value: 'Wrong',
                       },
                     ]);
                   } else {
                     setOptions([
                       {
-                        value: "",
+                        value: '',
                       },
                       {
-                        value: "",
+                        value: '',
                       },
                     ]);
                   }
                 }}
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
               >
                 <Option value="Single">Single</Option>
                 <Option value="Multiple">Multiple</Option>
@@ -403,13 +402,13 @@ export default function Question() {
             <Form.Item label="Question Options">
               <Button
                 onClick={() => {
-                  if (modelForm.getFieldValue("type") == "True/False") {
-                    message.error("True/False questions can only have 2 options!");
+                  if (modelForm.getFieldValue('type') === 'True/False') {
+                    message.error('True/False questions can only have 2 options!');
                     return;
                   }
                   const newOptions = [...options];
                   newOptions.push({
-                    value: "",
+                    value: '',
                   });
                   setOptions(newOptions);
                 }}
@@ -419,79 +418,75 @@ export default function Question() {
               </Button>
             </Form.Item>
 
-            {options.map((item, index) => {
-              return (
-                <Form.Item
-                  key={index}
-                  label={
-                    <span
-                      style={{
-                        opacity: 0,
-                      }}
-                    >
-                      1
-                    </span>
-                  }
-                  colon={false}
-                >
-                  <Space>
-                    <Input
-                      value={item.value}
-                      readOnly={modelForm.getFieldValue("type") == "True/False"}
-                      onChange={(e) => {
-                        const newOptions = [...options];
-                        newOptions[index].value = e.target.value;
-                        setOptions(newOptions);
-                      }}
-                    ></Input>
-                    <Button
-                      size="small"
-                      type="primary"
-                      danger
-                      onClick={() => {
-                        const newOptions = [...options];
-                        if (newOptions.length == 2) {
-                          message.error("At least 2 options!");
-                          return;
-                        }
-                        newOptions.splice(index, 1);
-                        setOptions(newOptions);
-                      }}
-                    >
-                      delete
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        const newOptions = [...options];
-                        const qType = modelForm.getFieldValue("type");
-                        console.log("qType = ", qType);
-                        if (qType === "Single" || qType === "True/False") {
-                          newOptions.forEach((optionItem) => {
-                            optionItem.isAnswer = false;
-                          });
-                          newOptions[index].isAnswer = true;
-                        } else {
-                          newOptions[index].isAnswer =
-                            !newOptions[index].isAnswer;
-                        }
-                        setOptions(newOptions);
-                      }}
-                      size="small"
-                      type={item.isAnswer ? "primary" : "default"}
-                      shape="circle"
-                      icon={<CheckCircleOutlined />}
-                    />
-                  </Space>
-                </Form.Item>
-              );
-            })}
+            {options.map((item, index) => (
+              <Form.Item
+                key={index}
+                label={(
+                  <span
+                    style={{
+                      opacity: 0,
+                    }}
+                  >
+                    1
+                  </span>
+                  )}
+                colon={false}
+              >
+                <Space>
+                  <Input
+                    value={item.value}
+                    readOnly={modelForm.getFieldValue('type') === 'True/False'}
+                    onChange={(e) => {
+                      const newOptions = [...options];
+                      newOptions[index].value = e.target.value;
+                      setOptions(newOptions);
+                    }}
+                  />
+                  <Button
+                    size="small"
+                    type="primary"
+                    danger
+                    onClick={() => {
+                      const newOptions = [...options];
+                      if (newOptions.length === 2) {
+                        message.error('At least 2 options!');
+                        return;
+                      }
+                      newOptions.splice(index, 1);
+                      setOptions(newOptions);
+                    }}
+                  >
+                    delete
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      const newOptions = [...options];
+                      const qType = modelForm.getFieldValue('type');
+                      if (qType === 'Single' || qType === 'True/False') {
+                        newOptions.forEach((optionItem) => {
+                          optionItem.isAnswer = false;
+                        });
+                        newOptions[index].isAnswer = true;
+                      } else {
+                        newOptions[index].isAnswer = !newOptions[index].isAnswer;
+                      }
+                      setOptions(newOptions);
+                    }}
+                    size="small"
+                    type={item.isAnswer ? 'primary' : 'default'}
+                    shape="circle"
+                    icon={<CheckCircleOutlined />}
+                  />
+                </Space>
+              </Form.Item>
+            ))}
             <Form.Item
               label="Question Analysis"
               name="desc"
               rules={[
                 {
                   required: true,
-                  message: "Please enter question analysis!",
+                  message: 'Please enter question analysis!',
                 },
               ]}
             >
@@ -506,7 +501,7 @@ export default function Question() {
           className={sty.SearchBox}
         >
           <Form
-            layout={"inline"}
+            layout="inline"
             form={form}
             onFinish={(v) => {
               setQuery({
@@ -535,7 +530,7 @@ export default function Question() {
                     form.resetFields();
                     setQuery({
                       index: 1,
-                      title: "",
+                      title: '',
                     });
                   }}
                 >
@@ -547,16 +542,14 @@ export default function Question() {
         </div>
         <Table
           columns={columns}
-          rowKey={(v) => {
-            return v.id;
-          }}
+          rowKey={(v) => v.id}
           pagination={false}
           dataSource={source.data}
         />
         <div
           style={{
-            textAlign: "center",
-            margin: "20px 0",
+            textAlign: 'center',
+            margin: '20px 0',
           }}
         >
           <Pagination
