@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const sequelize = new Sequelize('qs', 'root', '123456', {
+const sequelize = new Sequelize('qs', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     timezone: '+8:00',

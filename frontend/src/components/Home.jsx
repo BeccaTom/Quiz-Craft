@@ -60,7 +60,7 @@ export default function Home() {
             </Radio.Group>
           </Form.Item>
           <Form.Item initialValue={true} label="Timer" name="timer">
-            <Switch checkedChildren="open" unCheckedChildren="close" defaultChecked />
+            <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked />
           </Form.Item>
           <Form.Item
             label="Question Format"

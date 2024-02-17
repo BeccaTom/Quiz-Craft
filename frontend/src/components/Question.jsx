@@ -274,7 +274,7 @@ export default function Question() {
                 return item.isAnswer;
               });
               if (noAnswer.length == 0) {
-                message.error("You must write least one option!");
+                message.error("You must select at least one answer to be correct!");
                 return;
               }
               optionsStr = options

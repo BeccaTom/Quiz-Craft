@@ -69,7 +69,7 @@ exports.random = async (req, res) => {
     if (results.length < 10) {
         res.json({
             code: -1,
-            msg: "The number of available questions is less than 10! Please adjust your criteria or expand your selection for more results.",
+            msg: "The number of available questions is less than 10! Please create some questions, or adjust your criteria for more results.",
         });
         return;
     }

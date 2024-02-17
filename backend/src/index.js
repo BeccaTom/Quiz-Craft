@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/upload', upload.single('file'), function (req, res, next) {
-    res.json({ 
+    res.json({
         code: 200,
         message: "Upload successful!",
         data: {
@@ -34,7 +34,6 @@ app.post('/upload', upload.single('file'), function (req, res, next) {
 
 app.use('/', require('./router'));
 
-app.listen(5000, () => {
-    console.log('the server is running:localhost:5000');
+app.listen(5001, () => {
+    console.log('the server is running:localhost:5001');
 });
- 
