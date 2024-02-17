@@ -257,7 +257,7 @@ export default function QuestionManager() {
               const {
                 title, difficulty, type, subject, desc,
               } = v;
-              const optionsStr = '';
+              let optionsStr = '';
               const answerArr = [];
               const haveEmpty = options.filter((item) => !item.value);
               if (haveEmpty.length) {
