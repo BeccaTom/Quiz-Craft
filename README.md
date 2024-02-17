@@ -46,7 +46,7 @@ To start the backend application, follow these steps:
 
    ```javascript
    username: 'root',
-   password: '123456'
+   password: ''
    
 6. Before starting the backend server, set up the database:
 Create a new MySQL database named qs. Ensure the encoding is set to utf8 and collation to utf8_general_ci:
