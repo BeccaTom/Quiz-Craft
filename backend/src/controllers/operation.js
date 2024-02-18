@@ -18,6 +18,7 @@ exports.update = async (req, res) => {
         data
     });
 };
+
 exports.destroy = async (req, res) => {
     await sequelize.models.operation.destroy({
         where: {
@@ -29,6 +30,7 @@ exports.destroy = async (req, res) => {
         msg: "Successfully deleted!",
     });
 };
+
 exports.del = async (req, res) => {
     await sequelize.models.operation.destroy({
         where: {
@@ -40,6 +42,7 @@ exports.del = async (req, res) => {
         msg: "Successfully deleted!",
     });
 };
+
 exports.create = async (req, res) => {
     const {
         userId,
@@ -51,7 +54,7 @@ exports.create = async (req, res) => {
             userId,
             questionId,
         }
-    }) 
+    })
     if (disLikeItem) {
         await disLikeItem.destroy();
     }
@@ -62,7 +65,8 @@ exports.create = async (req, res) => {
         data
     });
 };
-exports.statics = async (req, res) => {
+
+exports.statistics = async (req, res) => {
     let {
         userId,
         questionId,
@@ -104,6 +108,7 @@ exports.statics = async (req, res) => {
         }
     });
 }
+
 exports.index = async (req, res) => {
     let {
         index,
@@ -151,6 +156,7 @@ exports.index = async (req, res) => {
     }
 
 };
+
 exports.detail = async (req, res) => {
     const data = await sequelize.models.operation.findOne({
         where: {

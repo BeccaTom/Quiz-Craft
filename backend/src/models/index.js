@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
+
 const sequelize = new Sequelize('qs', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
@@ -18,6 +19,7 @@ const sequelize = new Sequelize('qs', 'root', '', {
         }
     }
 })
+
 fs.readdir(__dirname, (err, files) => {
     if (err) {
         throw err;

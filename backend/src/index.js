@@ -12,16 +12,17 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + extname)
     }
 })
+
 const upload = multer({
     storage: storage,
     limits: { fieldSize: 25000 * 1024 * 1024 }
 })
+
 const app = express();
 app.use(cors());
 app.use(express.static('./src/uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.post('/upload', upload.single('file'), function (req, res, next) {
     res.json({
         code: 200,

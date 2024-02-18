@@ -5,7 +5,7 @@ let fileName = path.basename(__filename, '.js');
 const controller = require(`../controllers/${fileName}`);
 
 router.get('/', controller.index)
-router.get('/statics', controller.statics)
+router.get('/statistics', controller.statistics)
 router.get('/:id', controller.detail)
 router.put('/:id', controller.update)
 router.delete('/:id', controller.destroy)

@@ -19,6 +19,7 @@ exports.rank = async (req, res) => {
     });
 
 };
+
 exports.update = async (req, res) => {
     await sequelize.models.record.update(req.body, {
         where: {
@@ -47,6 +48,7 @@ exports.destroy = async (req, res) => {
         msg: "Successfully deleted!",
     });
 };
+
 exports.create = async (req, res) => {
     const data = await sequelize.models.record.create(req.body);
     res.json({
@@ -55,6 +57,7 @@ exports.create = async (req, res) => {
         data
     });
 };
+
 exports.index = async (req, res) => {
     let {
         index,
@@ -94,6 +97,7 @@ exports.index = async (req, res) => {
     }
 
 };
+
 exports.detail = async (req, res) => {
     const data = await sequelize.models.record.findOne({
         where: {

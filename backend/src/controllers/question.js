@@ -22,24 +22,20 @@ function getRandomQuestions(arr, numElements) {
     return randomElements;
 }
 
-
 function shuffleArray(array) {
     let currentIndex = array.length;
     let randomIndex;
-
 
     while (currentIndex !== 0) {
 
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-
         [array[currentIndex], array[randomIndex]] = [
             array[randomIndex],
             array[currentIndex],
         ];
     }
-
     return array;
 }
 
@@ -98,6 +94,7 @@ exports.update = async (req, res) => {
         data
     });
 };
+
 exports.destroy = async (req, res) => {
     await sequelize.models.question.destroy({
         where: {
@@ -109,6 +106,7 @@ exports.destroy = async (req, res) => {
         msg: "Successfully deleted!",
     });
 };
+
 exports.create = async (req, res) => {
     const data = await sequelize.models.question.create(req.body);
     res.json({
@@ -117,6 +115,7 @@ exports.create = async (req, res) => {
         data
     });
 };
+
 exports.index = async (req, res) => {
     let {
         index,
@@ -170,6 +169,7 @@ exports.index = async (req, res) => {
     }
 
 };
+
 exports.detail = async (req, res) => {
     const data = await sequelize.models.question.findOne({
         where: {

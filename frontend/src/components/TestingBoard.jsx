@@ -124,7 +124,7 @@ export default function TestingBoard() {
 
   const getOptData = async () => {
     const res = await fetchData({
-      url: '/operation/statics',
+      url: '/operation/statistics',
       method: 'GET',
       params: {
         userId: JSON.parse(window.localStorage.userinfo).id,
