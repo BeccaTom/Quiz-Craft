@@ -1,6 +1,8 @@
 # Quiz-Craft 📒
 Create personalized quizzes to test yourself and self-empower your learning with this simple app!
 
+https://github.com/BeccaTom/Quiz-Craft/assets/122641614/365a25df-5e33-4a6a-a2aa-b1c0e564e2de
+
 ### Functionality:
 - Login and Registration: Users can create and access their accounts.
 - Quiz Generation: Users can generate quizzes by selecting the type of questions, difficulty, and subject matter.
