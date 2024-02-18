@@ -61,7 +61,8 @@ Create a new MySQL database named qs. Ensure the encoding is set to utf8 and col
    (Make sure to replace path/to/qs.sql with the actual path to the qs.sql file.)
 8. After setting up the database, start the backend application:
 
-   ```npm run dev```
+   ```bash
+   npm run dev
 
 After completing these steps, both the frontend and backend should be fully operational.
 Also, you may choose to modify the database credentials in the backend configuration file to be personal to you.
